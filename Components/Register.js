@@ -11,6 +11,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import loginStyles from "./Styles";
 import { useNavigation } from "@react-navigation/native";
+import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0cxmSSpXPxnI7-58_9AnbEH3w5CdD-Ds",
@@ -31,20 +32,23 @@ export default function Register() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [address, setAddress] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [country, setCountry] = useState("");
 
   const validateName = (name) => /^[a-zA-Z]+$/.test(name);
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password) => /^[^\d]\w{9,}$/.test(password);
+  const validateZipCode = (zipCode) => /^\d+$/.test(zipCode);
+  const validateCountry = (country) => /^[a-zA-Z]+$/.test(country);
 
   const handleFirstNameChange = (text) => {
-    // Check if the input contains only letters
     if (/^[a-zA-Z]*$/.test(text)) {
       setFirstName(text);
     }
   };
 
   const handleLastNameChange = (text) => {
-    // Check if the input contains only letters
     if (/^[a-zA-Z]*$/.test(text)) {
       setLastName(text);
     }
@@ -64,11 +68,32 @@ export default function Register() {
         alert(
           "Invalid password. It should not start with a number and be at least 10 characters long."
         );
+      } else if (!validateZipCode(zipCode)) {
+        alert("Invalid zip code. Please use only numbers.");
+      } else if (!validateCountry(country)) {
+        alert("Invalid country. Please use only letters.");
       } else {
         // Use Firebase Authentication to create a new user
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const user = userCredential.user;
 
-        // After successful registration, navigate to the Home screen
+        // Store additional user information in Firestore
+        const db = getFirestore(app);
+        const userDocRef = doc(db, "users", user.uid);
+
+        await setDoc(userDocRef, {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          address: address,
+          zipCode: zipCode,
+          country: country,
+        });
+
         console.log("Registration successful!");
         navigation.navigate("Home");
       }
@@ -76,7 +101,6 @@ export default function Register() {
       console.error("Registration failed:", error.message);
     }
 
-    // Hide the keyboard after registration attempt
     Keyboard.dismiss();
   };
 
@@ -119,6 +143,31 @@ export default function Register() {
           value={password}
           placeholder="Enter your password"
           secureTextEntry={true}
+        />
+
+        <Text>Address:</Text>
+        <TextInput
+          style={loginStyles.input}
+          onChangeText={(text) => setAddress(text)}
+          value={address}
+          placeholder="Enter your address"
+        />
+
+        <Text>Zip Code:</Text>
+        <TextInput
+          style={loginStyles.input}
+          onChangeText={(text) => setZipCode(text)}
+          value={zipCode}
+          placeholder="Enter your zip code"
+          keyboardType="numeric"
+        />
+
+        <Text>Country:</Text>
+        <TextInput
+          style={loginStyles.input}
+          onChangeText={(text) => setCountry(text)}
+          value={country}
+          placeholder="Enter your country"
         />
 
         <TouchableOpacity onPress={handleRegister}>

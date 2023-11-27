@@ -12,6 +12,8 @@ const appReducer = (state = initialState, action) => {
         ...state,
         loading: action.payload,
       };
+    case "SET_USER_PROFILE":
+      return { ...state, userProfile: action.payload };
     case "SET_CUISINE_DATA":
       return {
         ...state,

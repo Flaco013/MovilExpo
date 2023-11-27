@@ -42,7 +42,7 @@ export default function Cuisine({ data, onAddToCart }) {
           <View key={index} style={styles.column}>
             <Image source={{ uri: item.imageUrl }} style={styles.image} />
             <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.price}>{item.price}</Text>
+            <Text style={styles.price}>${item.price}</Text>
             <TouchableOpacity onPress={() => handleAddButtonPress(item)}>
               <View style={styles.addButton}>
                 <Text style={styles.addButtonText}>Add</Text>
@@ -94,9 +94,10 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   price: {
-    fontSize: 14,
-    color: "gray",
+    fontSize: 17,
+    color: "orange",
     marginBottom: 5,
+    fontWeight: "bold",
   },
   addButton: {
     backgroundColor: "#4CAF50",

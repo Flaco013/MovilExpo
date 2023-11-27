@@ -10,7 +10,7 @@ import {
 import { connect } from "react-redux";
 import { removeFromCart, addToCart } from "./actions";
 
-const Cart = ({ selectedItems, removeFromCart, addToCart }) => {
+const Cart = ({ selectedItems, removeFromCart, addToCart, navigation }) => {
   const [totalPrice, setTotalPrice] = useState(0);
 
   // Calculate the total price when the selected items change
@@ -48,7 +48,7 @@ const Cart = ({ selectedItems, removeFromCart, addToCart }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Cart</Text>
+      <Text style={styles.title}>Your Order</Text>
       <FlatList
         data={selectedItems}
         keyExtractor={(item) => item.id.toString()}
@@ -60,17 +60,18 @@ const Cart = ({ selectedItems, removeFromCart, addToCart }) => {
               <Image source={{ uri: item.imageUrl }} style={styles.itemImage} />
               <View style={styles.itemDetails}>
                 <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemPrice}>{item.price}</Text>
+                <Text style={styles.itemPrice}>${item.price}</Text>
               </View>
               <View style={styles.buttonsContainer}>
                 <TouchableOpacity onPress={() => handleRemove(item)}>
                   <View style={styles.removeButton}>
-                    <Text style={styles.buttonText}>Remove</Text>
+                    <Text style={styles.buttonText}> - </Text>
                   </View>
                 </TouchableOpacity>
+                <Text style={styles.itemName}>{item.quantity} </Text>
                 <TouchableOpacity onPress={() => handleAddAnother(item)}>
                   <View style={styles.addButton}>
-                    <Text style={styles.buttonText}>Add Another</Text>
+                    <Text style={styles.buttonText}> + </Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -82,6 +83,16 @@ const Cart = ({ selectedItems, removeFromCart, addToCart }) => {
         <Text style={styles.totalText}>Total:</Text>
         <Text style={styles.totalAmount}>${totalPrice.toFixed(2)}</Text>
       </View>
+
+      {/* button to navigate to the checkout screen */}
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate("CheckOut", { totalPrice })}
+      >
+        <View style={styles.checkoutButton}>
+          <Text style={styles.buttonCheckOutText}>Go to Check Out</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -113,8 +124,8 @@ const styles = StyleSheet.create({
     alignItems: "center", // Align items vertically in the row
   },
   itemImage: {
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
     borderRadius: 5,
     marginRight: 10,
   },
@@ -122,12 +133,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemName: {
-    fontSize: 16,
+    fontSize: 19,
     fontWeight: "bold",
   },
   itemPrice: {
-    fontSize: 14,
-    color: "gray",
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "orange",
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -146,13 +158,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
   },
+  checkoutButton: {
+    backgroundColor: "black",
+    paddingVertical: 20,
+    paddingHorizontal: 125,
+    borderRadius: 10,
+    marginBottom: 70,
+  },
   buttonText: {
     color: "white",
+  },
+  buttonCheckOutText: {
+    color: "white",
+    fontWeight: "bold",
   },
   totalContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 10,
+    // marginTop: 10,
+    marginBottom: 170,
     borderTopWidth: 1,
     paddingTop: 10,
   },

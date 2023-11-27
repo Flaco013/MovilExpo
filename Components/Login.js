@@ -10,6 +10,9 @@ import loginStyles from "./Styles";
 import { useNavigation } from "@react-navigation/native";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { setUserProfile } from "./actions";
+import { connect } from "react-redux";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0cxmSSpXPxnI7-58_9AnbEH3w5CdD-Ds",
@@ -25,7 +28,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-export default function Login() {
+const Login = ({ dispatch }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
@@ -42,11 +45,31 @@ export default function Login() {
         return;
       }
 
+      // signInWithEmailAndPassword is called directly on auth, not auth()
       await signInWithEmailAndPassword(auth, email, password);
 
+      // Retrieve additional user information from Firestore
+      const user = auth.currentUser; // Use currentUser instead of auth()
+      const db = getFirestore(app);
+      const userDocRef = doc(db, "users", user.uid);
+
+      // Get the user profile data
+      const userSnapshot = await getDoc(userDocRef);
+      const userProfile = userSnapshot.data();
+
+      // Log user information to the terminal
       console.log("Login successful!");
+      console.log("User Name:", userProfile.firstName);
+      console.log("User Last Name:", userProfile.lastName);
+      console.log("User Email:", userProfile.email);
+      console.log("User Address:", userProfile.address);
+      console.log("User Zip Code:", userProfile.zipCode);
+      console.log("User Country:", userProfile.country);
+
+      dispatch(setUserProfile(userProfile));
       // Navigate to the next screen or perform other actions
       navigation.navigate("Home");
+      //navigation.navigate("CheckOut", { totalPrice, userProfile });
     } catch (error) {
       console.error("Login failed:", error.message);
       alert("Login failed. Please check your email and password.");
@@ -96,4 +119,6 @@ export default function Login() {
       </View>
     </ImageBackground>
   );
-}
+};
+
+export default connect()(Login);

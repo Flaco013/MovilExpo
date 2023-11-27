@@ -8,3 +8,8 @@ export const removeFromCart = (item) => ({
   type: "REMOVE_FROM_CART",
   payload: item,
 });
+
+export const setUserProfile = (profile) => ({
+  type: "SET_USER_PROFILE",
+  payload: profile,
+});
