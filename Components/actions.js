@@ -13,3 +13,8 @@ export const setUserProfile = (profile) => ({
   type: "SET_USER_PROFILE",
   payload: profile,
 });
+
+export const setUserId = (userId) => ({
+  type: "SET_USER_ID",
+  payload: userId,
+});

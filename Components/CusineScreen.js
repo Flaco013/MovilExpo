@@ -14,7 +14,7 @@ const CuisineScreen = ({ cuisineData, loading, addToCart, selectedItems }) => {
       try {
         dispatch({ type: "SET_LOADING", payload: true }); // Dispatch action to set loading to true
 
-        const response = await fetch("http://192.168.1.75:3000/dishes");
+        const response = await fetch("http://192.168.1.69:3000/dishes");
         const data = await response.json();
 
         const simplifiedData = data.map((item) => ({

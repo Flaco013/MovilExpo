@@ -12,6 +12,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { setUserProfile } from "./actions";
+import { setUserId } from "./actions";
 import { connect } from "react-redux";
 
 const firebaseConfig = {
@@ -59,14 +60,20 @@ const Login = ({ dispatch }) => {
 
       // Log user information to the terminal
       console.log("Login successful!");
+      console.log("User ID:", user.uid);
+
       console.log("User Name:", userProfile.firstName);
       console.log("User Last Name:", userProfile.lastName);
       console.log("User Email:", userProfile.email);
       console.log("User Address:", userProfile.address);
+      console.log("city:", userProfile.city);
+      console.log("State:", userProfile.sate);
       console.log("User Zip Code:", userProfile.zipCode);
       console.log("User Country:", userProfile.country);
 
       dispatch(setUserProfile(userProfile));
+      dispatch(setUserId(user.uid));
+
       // Navigate to the next screen or perform other actions
       navigation.navigate("Home");
       //navigation.navigate("CheckOut", { totalPrice, userProfile });

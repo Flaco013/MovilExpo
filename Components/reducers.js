@@ -2,6 +2,7 @@ const initialState = {
   cuisineData: [],
   selectedItems: [],
   loading: false,
+
   // ... other state properties
 };
 
@@ -14,6 +15,9 @@ const appReducer = (state = initialState, action) => {
       };
     case "SET_USER_PROFILE":
       return { ...state, userProfile: action.payload };
+
+    case "SET_USER_ID":
+      return { ...state, userId: action.payload };
     case "SET_CUISINE_DATA":
       return {
         ...state,

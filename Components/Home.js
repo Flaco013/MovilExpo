@@ -19,6 +19,12 @@ export default function Home() {
     }
   }
 
+  function handleOrdersPress() {
+    console.log("Orders button pressed");
+    // Navigate to the Orders screen
+    navigation.navigate("Orders");
+  }
+
   return (
     <ImageBackground
       source={require("/Users/alexisgasga1/todo-list-mobile/assets/sushi.png")}
@@ -62,6 +68,20 @@ export default function Home() {
             >
               <Text style={loginStyles.title}>CUISINE</Text>
             </ImageBackground>
+          </TouchableOpacity>
+
+          {/* Orders button */}
+          <TouchableOpacity
+            style={{
+              width: "100%",
+              borderRadius: 20,
+              overflow: "hidden",
+              backgroundColor: "blue", // Add your desired background color
+              paddingVertical: 15,
+            }}
+            onPress={handleOrdersPress}
+          >
+            <Text style={{ color: "white", fontSize: 20 }}>Orders</Text>
           </TouchableOpacity>
         </View>
       </View>
