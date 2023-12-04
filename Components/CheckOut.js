@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { connect } from "react-redux";
+import { clearCart } from "./actions";
 import {
   getFirestore,
   collection,
@@ -9,37 +10,38 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
-function CheckOut({ userProfile, userId }) {
+import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
+
+function CheckOut({ userProfile, userId, dispatchClearCart }) {
   const route = useRoute();
   const { totalPrice } = route.params;
-
-  console.log("this should be the ID", userId);
+  const nav = useNavigation();
 
   const handlePlaceOrder = async () => {
     try {
-      // Create a reference to the 'orders' collection in Firestore
       const db = getFirestore();
       const ordersCollection = collection(db, "orders");
 
-      // Create a new order document with user ID, total amount, and timestamp
       const newOrder = {
-        id: userId, /// Assuming you have a userId in your userProfile
+        id: userId,
         total_amount: totalPrice,
         date: serverTimestamp(),
       };
 
-      // Add the new order to the 'orders' collection
       const docRef = await addDoc(ordersCollection, newOrder);
 
-      console.log("Order placed successfully! Order ID:", docRef.id);
+      dispatchClearCart();
 
-      // Show an alert when the order is placed successfully
       Alert.alert("Success", "Order placed successfully!", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
+        {
+          text: "OK",
+          onPress: () => {
+            nav.navigate("Home");
+          },
+        },
       ]);
     } catch (error) {
       console.error("Error placing order:", error.message);
-      // Show an alert for the error if needed
       Alert.alert("Error", `Error placing order: ${error.message}`, [
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
@@ -48,14 +50,35 @@ function CheckOut({ userProfile, userId }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Ship to </Text>
-      <Text style={styles.infoText}>First Name: {userProfile.firstName}</Text>
-      <Text style={styles.infoText}>Last Name: {userProfile.lastName}</Text>
-      <Text style={styles.infoText}>Address: {userProfile.address}</Text>
-      <Text style={styles.infoText}>city: {userProfile.city}</Text>
-      <Text style={styles.infoText}>State: {userProfile.sate}</Text>
-      <Text style={styles.infoText}>Zip Code: {userProfile.zipCode}</Text>
-      <Text style={styles.infoText}>Country: {userProfile.country}</Text>
+      <Text style={styles.title}>Delivery Details</Text>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>First Name:</Text>
+        <Text style={styles.infoValue}>{userProfile.firstName}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>Last Name:</Text>
+        <Text style={styles.infoValue}>{userProfile.lastName}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>Address:</Text>
+        <Text style={styles.infoValue}>{userProfile.address}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>City:</Text>
+        <Text style={styles.infoValue}>{userProfile.city}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>State:</Text>
+        <Text style={styles.infoValue}>{userProfile.state}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>Zip Code:</Text>
+        <Text style={styles.infoValue}>{userProfile.zipCode}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoLabel}>Country:</Text>
+        <Text style={styles.infoValue}>{userProfile.country}</Text>
+      </View>
 
       <Text style={styles.amountText}>
         Total Amount: ${totalPrice.toFixed(2)}
@@ -73,17 +96,20 @@ function CheckOut({ userProfile, userId }) {
 }
 
 const mapStateToProps = (state) => ({
-  userProfile: state.userProfile, // Assuming you have a userProfile reducer
+  userProfile: state.userProfile,
   userId: state.userId,
 });
 
-export default connect(mapStateToProps)(CheckOut);
+const mapDispatchToProps = (dispatch) => ({
+  dispatchClearCart: () => dispatch(clearCart()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CheckOut);
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
     flex: 1,
-    justifyContent: "center",
   },
   title: {
     fontSize: 24,
@@ -91,11 +117,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
-  infoText: {
-    fontSize: 18,
+  infoContainer: {
+    flexDirection: "row",
     marginBottom: 10,
+    alignItems: "center",
   },
-
+  infoLabel: {
+    fontSize: 18,
+    fontWeight: "bold",
+    width: 120,
+  },
+  infoValue: {
+    fontSize: 18,
+  },
   amountText: {
     fontSize: 18,
     marginBottom: 10,
@@ -113,5 +147,4 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  // Add more styles as needed
 });

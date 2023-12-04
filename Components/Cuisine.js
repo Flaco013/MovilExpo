@@ -57,15 +57,17 @@ export default function Cuisine({ data, onAddToCart }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    padding: 15,
+    backgroundColor: "#fff", // Background color
   },
   searchInput: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     marginBottom: 10,
-    paddingHorizontal: 10,
-    borderRadius: 5,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    fontSize: 16,
   },
   rowContainer: {
     flexDirection: "row",
@@ -74,38 +76,42 @@ const styles = StyleSheet.create({
   },
   column: {
     width: "48%", // Adjust the width to leave some space for margin
-    marginBottom: 10,
+    marginBottom: 15,
     borderWidth: 1,
-    borderColor: "gray",
-    padding: 10,
-    borderRadius: 5,
+    borderColor: "#ddd", // Border color
+    padding: 15,
+    borderRadius: 8,
     alignItems: "center",
+    backgroundColor: "#fff", // Background color
   },
   image: {
     width: "100%",
-    height: 100, // Adjust the height based on your preference
-    marginBottom: 5,
+    height: 120, // Adjust the height based on your preference
+    marginBottom: 10,
     resizeMode: "cover",
-    borderRadius: 5,
+    borderRadius: 8,
   },
   name: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
+    color: "#333", // Text color
   },
   price: {
-    fontSize: 17,
+    fontSize: 16,
     color: "orange",
     marginBottom: 5,
     fontWeight: "bold",
   },
   addButton: {
     backgroundColor: "#4CAF50",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    marginTop: 10,
   },
   addButtonText: {
     color: "white",
+    fontSize: 16,
   },
 });

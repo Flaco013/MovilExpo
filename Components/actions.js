@@ -18,3 +18,7 @@ export const setUserId = (userId) => ({
   type: "SET_USER_ID",
   payload: userId,
 });
+
+export const clearCart = () => ({
+  type: "CLEAR_CART",
+});

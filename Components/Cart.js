@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { connect } from "react-redux";
 import { removeFromCart, addToCart } from "./actions";
@@ -44,6 +45,17 @@ const Cart = ({ selectedItems, removeFromCart, addToCart, navigation }) => {
 
   const handleAddAnother = (item) => {
     addToCart(item);
+  };
+
+  const handleNavigateToCheckout = () => {
+    if (totalPrice > 0) {
+      navigation.navigate("CheckOut", { totalPrice });
+    } else {
+      // Display alert if the cart is empty
+      Alert.alert("Empty Cart", "Cart is empty. Please add items in cuisine.", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
+    }
   };
 
   return (
@@ -86,9 +98,7 @@ const Cart = ({ selectedItems, removeFromCart, addToCart, navigation }) => {
 
       {/* button to navigate to the checkout screen */}
 
-      <TouchableOpacity
-        onPress={() => navigation.navigate("CheckOut", { totalPrice })}
-      >
+      <TouchableOpacity onPress={handleNavigateToCheckout}>
         <View style={styles.checkoutButton}>
           <Text style={styles.buttonCheckOutText}>Go to Check Out</Text>
         </View>
@@ -112,16 +122,22 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     flex: 1,
+    backgroundColor: "#fff", // Add background color
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 20,
+    textAlign: "center",
+    color: "#333", // Add text color
   },
   cartItem: {
     flexDirection: "row",
     marginBottom: 10,
     alignItems: "center", // Align items vertically in the row
+    backgroundColor: "#f5f5f5", // Add item background color
+    padding: 10, // Add padding
+    borderRadius: 8, // Add border radius
   },
   itemImage: {
     width: 70,
@@ -133,11 +149,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemName: {
-    fontSize: 19,
+    fontSize: 18,
     fontWeight: "bold",
+    color: "#333", // Add text color
   },
   itemPrice: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: "bold",
     color: "orange",
   },
@@ -158,34 +175,38 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
   },
-  checkoutButton: {
-    backgroundColor: "black",
-    paddingVertical: 20,
-    paddingHorizontal: 125,
-    borderRadius: 10,
-    marginBottom: 70,
-  },
   buttonText: {
     color: "white",
+    fontSize: 16,
+  },
+  checkoutButton: {
+    backgroundColor: "black",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 20,
+    alignItems: "center",
   },
   buttonCheckOutText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 18,
   },
   totalContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // marginTop: 10,
-    marginBottom: 170,
+    marginBottom: 20,
     borderTopWidth: 1,
     paddingTop: 10,
   },
   totalText: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#333", // Add text color
   },
   totalAmount: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "green",
   },
 });

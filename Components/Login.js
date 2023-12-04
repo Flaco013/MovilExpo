@@ -67,7 +67,8 @@ const Login = ({ dispatch }) => {
       console.log("User Email:", userProfile.email);
       console.log("User Address:", userProfile.address);
       console.log("city:", userProfile.city);
-      console.log("State:", userProfile.sate);
+      console.log("State:", userProfile.state);
+      //console.log("State:", userProfile.sate);
       console.log("User Zip Code:", userProfile.zipCode);
       console.log("User Country:", userProfile.country);
 

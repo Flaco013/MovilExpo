@@ -23,6 +23,12 @@ const appReducer = (state = initialState, action) => {
         ...state,
         cuisineData: action.payload,
       };
+    case "CLEAR_CART":
+      return {
+        ...state,
+        selectedItems: [],
+      };
+
     case "ADD_TO_CART":
       const existingItemIndex = state.selectedItems.findIndex(
         (item) => item.id === action.payload.id
