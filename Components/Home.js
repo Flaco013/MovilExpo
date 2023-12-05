@@ -25,13 +25,24 @@ export default function Home() {
     navigation.navigate("Orders");
   }
 
+  function handleMapPress() {
+    console.log("Map button pressed");
+    // Navigate to the Map screen
+    navigation.navigate("Map");
+  }
+
+  function handleSettingsPress() {
+    console.log("Settigns button pressed");
+    // Navigate to the Map screen
+    navigation.navigate("Settings");
+  }
   return (
     <ImageBackground
       source={require("/Users/alexisgasga1/todo-list-mobile/assets/sushi.png")}
       style={loginStyles.background}
     >
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        {/* Menu button in the top-left corner */}
+        <Text style={loginStyles.title}>PAZ SUSHI BAR</Text>
         <TouchableOpacity
           style={{ position: "absolute", top: 20, left: 20 }}
           onPress={handleMenuPress}
@@ -53,7 +64,7 @@ export default function Home() {
               width: "100%",
               borderRadius: 20,
               overflow: "hidden",
-              marginBottom: 20,
+              marginBottom: 10,
             }}
             onPress={() => handleButtonPress("CUISINE")}
           >
@@ -61,7 +72,7 @@ export default function Home() {
               source={require("/Users/alexisgasga1/todo-list-mobile/assets/images9.jpeg")}
               style={{
                 width: "100%",
-                height: 180,
+                height: 150,
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -69,19 +80,71 @@ export default function Home() {
               <Text style={loginStyles.title}>CUISINE</Text>
             </ImageBackground>
           </TouchableOpacity>
-
           {/* Orders button */}
           <TouchableOpacity
             style={{
               width: "100%",
               borderRadius: 20,
               overflow: "hidden",
-              backgroundColor: "blue", // Add your desired background color
-              paddingVertical: 15,
+              marginBottom: 20,
             }}
             onPress={handleOrdersPress}
           >
-            <Text style={{ color: "white", fontSize: 20 }}>Orders</Text>
+            <ImageBackground
+              source={require("/Users/alexisgasga1/todo-list-mobile/assets/orders.jpeg")}
+              style={{
+                width: "100%",
+                height: 150,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={loginStyles.title}>Orders</Text>
+            </ImageBackground>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              width: "100%",
+              borderRadius: 20,
+              overflow: "hidden",
+              marginBottom: 20,
+            }}
+            onPress={handleMapPress}
+          >
+            <ImageBackground
+              source={require("/Users/alexisgasga1/todo-list-mobile/assets/sushi13.jpeg")}
+              style={{
+                width: "100%",
+                height: 150,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={loginStyles.title}>Locations</Text>
+            </ImageBackground>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              width: "100%",
+              borderRadius: 20,
+              overflow: "hidden",
+              marginBottom: 20,
+            }}
+            onPress={handleSettingsPress}
+          >
+            <ImageBackground
+              source={require("/Users/alexisgasga1/todo-list-mobile/assets/settings2.png")}
+              style={{
+                width: "100%",
+                height: 140,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={loginStyles.title}>Settings</Text>
+            </ImageBackground>
           </TouchableOpacity>
         </View>
       </View>

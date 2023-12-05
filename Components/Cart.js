@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  ImageBackground,
 } from "react-native";
+import loginStyles from "./Styles";
 import { connect } from "react-redux";
 import { removeFromCart, addToCart } from "./actions";
 
@@ -59,51 +61,59 @@ const Cart = ({ selectedItems, removeFromCart, addToCart, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Your Order</Text>
-      <FlatList
-        data={selectedItems}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => {
-          console.log("this is from Cart component");
-          console.log("Rendering Item:", item);
-          return (
-            <View style={styles.cartItem}>
-              <Image source={{ uri: item.imageUrl }} style={styles.itemImage} />
-              <View style={styles.itemDetails}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemPrice}>${item.price}</Text>
+    <ImageBackground
+      source={require("/Users/alexisgasga1/todo-list-mobile/assets/sushi.png")}
+      style={loginStyles.background}
+    >
+      <View style={styles.container}>
+        <Text style={styles.title}>Your Order</Text>
+        <FlatList
+          data={selectedItems}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => {
+            console.log("this is from Cart component");
+            console.log("Rendering Item:", item);
+            return (
+              <View style={styles.cartItem}>
+                <Image
+                  source={{ uri: item.imageUrl }}
+                  style={styles.itemImage}
+                />
+                <View style={styles.itemDetails}>
+                  <Text style={styles.itemName}>{item.name}</Text>
+                  <Text style={styles.itemPrice}>${item.price}</Text>
+                </View>
+                <View style={styles.buttonsContainer}>
+                  <TouchableOpacity onPress={() => handleRemove(item)}>
+                    <View style={styles.removeButton}>
+                      <Text style={styles.buttonText}> - </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <Text style={styles.itemName}>{item.quantity} </Text>
+                  <TouchableOpacity onPress={() => handleAddAnother(item)}>
+                    <View style={styles.addButton}>
+                      <Text style={styles.buttonText}> + </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={() => handleRemove(item)}>
-                  <View style={styles.removeButton}>
-                    <Text style={styles.buttonText}> - </Text>
-                  </View>
-                </TouchableOpacity>
-                <Text style={styles.itemName}>{item.quantity} </Text>
-                <TouchableOpacity onPress={() => handleAddAnother(item)}>
-                  <View style={styles.addButton}>
-                    <Text style={styles.buttonText}> + </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          );
-        }}
-      />
-      <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>Total:</Text>
-        <Text style={styles.totalAmount}>${totalPrice.toFixed(2)}</Text>
-      </View>
-
-      {/* button to navigate to the checkout screen */}
-
-      <TouchableOpacity onPress={handleNavigateToCheckout}>
-        <View style={styles.checkoutButton}>
-          <Text style={styles.buttonCheckOutText}>Go to Check Out</Text>
+            );
+          }}
+        />
+        <View style={styles.totalContainer}>
+          <Text style={styles.totalText}>Total:</Text>
+          <Text style={styles.totalAmount}>${totalPrice.toFixed(2)}</Text>
         </View>
-      </TouchableOpacity>
-    </View>
+
+        {/* button to navigate to the checkout screen */}
+
+        <TouchableOpacity onPress={handleNavigateToCheckout}>
+          <View style={styles.checkoutButton}>
+            <Text style={styles.buttonCheckOutText}>Go to Check Out</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -122,7 +132,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     flex: 1,
-    backgroundColor: "#fff", // Add background color
+    //backgroundColor: "#fff", // Add background color
   },
   title: {
     fontSize: 24,
@@ -149,12 +159,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemName: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#333", // Add text color
   },
   itemPrice: {
-    fontSize: 16,
+    fontSize: 19,
     fontWeight: "bold",
     color: "orange",
   },
@@ -200,13 +210,13 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   totalText: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
-    color: "#333", // Add text color
+    color: "black", // Add text color
   },
   totalAmount: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
-    color: "green",
+    color: "#7fff00",
   },
 });

@@ -9,7 +9,9 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ImageBackground,
 } from "react-native";
+import loginStyles from "./Styles";
 
 export default function Cuisine({ data, onAddToCart }) {
   const [searchText, setSearchText] = useState("");
@@ -22,7 +24,6 @@ export default function Cuisine({ data, onAddToCart }) {
   );
 
   const handleAddButtonPress = (item) => {
-    // Call the onAddToChart function with the selected item
     onAddToCart(item);
   };
 
@@ -35,22 +36,26 @@ export default function Cuisine({ data, onAddToCart }) {
         onChangeText={(text) => setSearchText(text)}
         value={searchText}
       />
-
-      {/* Display filtered data in two columns per row */}
-      <View style={styles.rowContainer}>
-        {filteredData.map((item, index) => (
-          <View key={index} style={styles.column}>
-            <Image source={{ uri: item.imageUrl }} style={styles.image} />
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.price}>${item.price}</Text>
-            <TouchableOpacity onPress={() => handleAddButtonPress(item)}>
-              <View style={styles.addButton}>
-                <Text style={styles.addButtonText}>Add</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </View>
+      <ImageBackground
+        source={require("/Users/alexisgasga1/todo-list-mobile/assets/sushi.png")}
+        style={loginStyles.background}
+      >
+        {/* Display filtered data in two columns per row */}
+        <View style={styles.rowContainer}>
+          {filteredData.map((item, index) => (
+            <View key={index} style={styles.column}>
+              <Image source={{ uri: item.imageUrl }} style={styles.image} />
+              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.price}>${item.price}</Text>
+              <TouchableOpacity onPress={() => handleAddButtonPress(item)}>
+                <View style={styles.addButton}>
+                  <Text style={styles.addButtonText}>Add</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      </ImageBackground>
     </ScrollView>
   );
 }
@@ -58,16 +63,24 @@ export default function Cuisine({ data, onAddToCart }) {
 const styles = StyleSheet.create({
   container: {
     padding: 15,
-    backgroundColor: "#fff", // Background color
+    backgroundColor: "#59CDCE",
   },
   searchInput: {
     height: 40,
-    borderColor: "#ccc",
+
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 15,
     borderRadius: 8,
     fontSize: 16,
+    borderColor: "#59515E",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   rowContainer: {
     flexDirection: "row",
@@ -75,27 +88,35 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   column: {
-    width: "48%", // Adjust the width to leave some space for margin
+    width: "48%",
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: "#ddd", // Border color
+    borderColor: "gray",
     padding: 15,
     borderRadius: 8,
     alignItems: "center",
-    backgroundColor: "#fff", // Background color
+    backgroundColor: "#fff",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   image: {
     width: "100%",
-    height: 120, // Adjust the height based on your preference
+    height: 120,
     marginBottom: 10,
     resizeMode: "cover",
     borderRadius: 8,
+    borderColor: "black",
   },
   name: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
-    color: "#333", // Text color
+    color: "#333",
   },
   price: {
     fontSize: 16,

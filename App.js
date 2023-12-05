@@ -16,6 +16,8 @@ import Cuisine from "./Components/Cuisine";
 import Cart from "./Components/Cart";
 import CheckOut from "./Components/CheckOut";
 import Orders from "./Components/Orders";
+import Map from "./Components/Map";
+import Settings from "./Components/Settings";
 
 const Stack = createStackNavigator();
 // Import the functions you need from the SDKs you need
@@ -53,6 +55,8 @@ export default function App() {
           <Stack.Screen name="Cart" component={Cart} />
           <Stack.Screen name="CheckOut" component={CheckOut} />
           <Stack.Screen name="Orders" component={Orders} />
+          <Stack.Screen name="Map" component={Map} />
+          <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen
             name="Home"
             component={Home}

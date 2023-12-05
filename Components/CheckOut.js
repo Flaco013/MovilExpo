@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ImageBackground,
+} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { connect } from "react-redux";
 import { clearCart } from "./actions";
@@ -9,7 +16,7 @@ import {
   addDoc,
   serverTimestamp,
 } from "firebase/firestore";
-
+import loginStyles from "./Styles";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 
 function CheckOut({ userProfile, userId, dispatchClearCart }) {
@@ -49,49 +56,54 @@ function CheckOut({ userProfile, userId, dispatchClearCart }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Delivery Details</Text>
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoLabel}>First Name:</Text>
-        <Text style={styles.infoValue}>{userProfile.firstName}</Text>
-      </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoLabel}>Last Name:</Text>
-        <Text style={styles.infoValue}>{userProfile.lastName}</Text>
-      </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoLabel}>Address:</Text>
-        <Text style={styles.infoValue}>{userProfile.address}</Text>
-      </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoLabel}>City:</Text>
-        <Text style={styles.infoValue}>{userProfile.city}</Text>
-      </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoLabel}>State:</Text>
-        <Text style={styles.infoValue}>{userProfile.state}</Text>
-      </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoLabel}>Zip Code:</Text>
-        <Text style={styles.infoValue}>{userProfile.zipCode}</Text>
-      </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoLabel}>Country:</Text>
-        <Text style={styles.infoValue}>{userProfile.country}</Text>
-      </View>
+    <ImageBackground
+      source={require("/Users/alexisgasga1/todo-list-mobile/assets/sushi.png")}
+      style={loginStyles.background}
+    >
+      <View style={styles.container}>
+        <Text style={styles.title}>Delivery Details</Text>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>First Name:</Text>
+          <Text style={styles.infoValue}>{userProfile.firstName}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>Last Name:</Text>
+          <Text style={styles.infoValue}>{userProfile.lastName}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>Address:</Text>
+          <Text style={styles.infoValue}>{userProfile.address}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>City:</Text>
+          <Text style={styles.infoValue}>{userProfile.city}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>State:</Text>
+          <Text style={styles.infoValue}>{userProfile.state}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>Zip Code:</Text>
+          <Text style={styles.infoValue}>{userProfile.zipCode}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>Country:</Text>
+          <Text style={styles.infoValue}>{userProfile.country}</Text>
+        </View>
 
-      <Text style={styles.amountText}>
-        Total Amount: ${totalPrice.toFixed(2)}
-      </Text>
+        <Text style={styles.amountText}>
+          Total Amount: ${totalPrice.toFixed(2)}
+        </Text>
 
-      {/* Place Order Button */}
-      <TouchableOpacity
-        onPress={handlePlaceOrder}
-        style={styles.placeOrderButton}
-      >
-        <Text style={styles.placeOrderButtonText}>Place Order</Text>
-      </TouchableOpacity>
-    </View>
+        {/* Place Order Button */}
+        <TouchableOpacity
+          onPress={handlePlaceOrder}
+          style={styles.placeOrderButton}
+        >
+          <Text style={styles.placeOrderButtonText}>Place Order</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 }
 
@@ -110,6 +122,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     flex: 1,
+    backgroundColor: "#59CDCE",
   },
   title: {
     fontSize: 24,
@@ -131,9 +144,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   amountText: {
-    fontSize: 18,
+    fontSize: 23,
+    marginTop: 290,
     marginBottom: 10,
     fontWeight: "bold",
+    color: "black",
+    textAlign: "center",
   },
   placeOrderButton: {
     backgroundColor: "green",
