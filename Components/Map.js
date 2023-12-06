@@ -4,18 +4,18 @@ import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 const LaPazCoordinates = {
-  latitude: 24.142, // Replace with the actual latitude of La Paz
-  longitude: -110.312, // Replace with the actual longitude of La Paz
+  latitude: 24.142,
+  longitude: -110.312,
 };
 
 const CaboSanLucasCoordinates = {
-  latitude: 22.8905, // Replace with the actual latitude of Cabo San Lucas
-  longitude: -109.9167, // Replace with the actual longitude of Cabo San Lucas
+  latitude: 22.8905,
+  longitude: -109.9167,
 };
 
 const SanJoseDelCaboCoordinates = {
-  latitude: 23.0608, // Replace with the actual latitude of San Jose del Cabo
-  longitude: -109.7011, // Replace with the actual longitude of San Jose del Cabo
+  latitude: 23.0608,
+  longitude: -109.7011,
 };
 
 const Map = () => {

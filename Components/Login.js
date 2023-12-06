@@ -75,6 +75,9 @@ const Login = ({ dispatch }) => {
       dispatch(setUserProfile(userProfile));
       dispatch(setUserId(user.uid));
 
+      setEmail("");
+      setPassword("");
+
       // Navigate to the next screen or perform other actions
       navigation.navigate("Home");
       //navigation.navigate("CheckOut", { totalPrice, userProfile });

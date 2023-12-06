@@ -18,6 +18,8 @@ import CheckOut from "./Components/CheckOut";
 import Orders from "./Components/Orders";
 import Map from "./Components/Map";
 import Settings from "./Components/Settings";
+import PasswordSettings from "./Components/PasswordSettings";
+import ProfileSettings from "./Components/ProfileSettings";
 
 const Stack = createStackNavigator();
 // Import the functions you need from the SDKs you need
@@ -57,6 +59,8 @@ export default function App() {
           <Stack.Screen name="Orders" component={Orders} />
           <Stack.Screen name="Map" component={Map} />
           <Stack.Screen name="Settings" component={Settings} />
+          <Stack.Screen name="PasswordSettings" component={PasswordSettings} />
+          <Stack.Screen name="ProfileSettings" component={ProfileSettings} />
           <Stack.Screen
             name="Home"
             component={Home}
