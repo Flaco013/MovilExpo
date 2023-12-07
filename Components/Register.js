@@ -13,8 +13,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import loginStyles from "./Styles";
 import { useNavigation } from "@react-navigation/native";
-import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
-import { Picker } from "@react-native-picker/picker"; // Import Picker from the new package
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0cxmSSpXPxnI7-58_9AnbEH3w5CdD-Ds",
@@ -40,51 +39,61 @@ export default function Register() {
   const [country, setCountry] = useState("Mexico");
   const [state, setState] = useState("Baja California Sur");
   const [city, setCity] = useState("");
-  const [showCityPicker, setShowCityPicker] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPasswordMismatch, setShowPasswordMismatch] = useState(false);
 
-  const cityOptions = ["La Paz", "Cabo San Lucas", "San Jose del Cabo"];
-
-  const validateName = (name) => /^[a-zA-Z]+$/.test(name);
+  const validateName = (name) => /^[a-zA-Z ]+$/.test(name);
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const validatePassword = (password) => /^[^\d]\w{9,}$/.test(password);
+  const validatePassword = (password) => /^[^\d]\w{9,15}$/.test(password);
   const validateZipCode = (zipCode) => /^\d+$/.test(zipCode);
   const validateCountry = (country) => /^[a-zA-Z]+$/.test(country);
 
   const handleFirstNameChange = (text) => {
-    if (/^[a-zA-Z]*$/.test(text)) {
+    if (/^[a-zA-Z ]*$/.test(text)) {
       setFirstName(text);
     }
   };
 
   const handleLastNameChange = (text) => {
-    if (/^[a-zA-Z]*$/.test(text)) {
+    if (/^[a-zA-Z ]*$/.test(text)) {
       setLastName(text);
     }
   };
 
   const handleZipCodeChange = (text) => {
-    // Validate zip code format, but don't show alert here
     setZipCode(text);
   };
 
   const navigation = useNavigation();
+  const handlePasswordChange = (text) => {
+    if (/\s/.test(text)) {
+      Alert.alert("Invalid password", "Password should not contain spaces.");
+    } else {
+      setPassword(text);
+    }
+  };
+
+  const handleConfirmPasswordChange = (text) => {
+    setConfirmPassword(text);
+    setShowPasswordMismatch(false);
+  };
 
   const handleRegister = async () => {
     try {
       if (!validateName(firstName)) {
-        alert("Invalid first name. Please use only letters.");
+        Alert.alert("Invalid first name. Please use only letters.");
       } else if (!validateName(lastName)) {
-        alert("Invalid last name. Please use only letters.");
+        Alert.alert("Invalid last name. Please use only letters.");
       } else if (!validateEmail(email)) {
-        alert("Invalid email address");
+        Alert.alert("Invalid email address");
       } else if (!validatePassword(password)) {
-        alert(
-          "Invalid password. It should not start with a number and be at least 10 characters long."
+        Alert.alert(
+          "Invalid password. It should not start with a number and be between 9 and 15 characters long."
         );
-      } else if (city === "") {
-        alert("Please select a city.");
       } else if (zipCode.length !== 5) {
         Alert.alert("Invalid zip code", "It must have exactly 5 digits.");
+      } else if (password !== confirmPassword) {
+        setShowPasswordMismatch(true);
       } else {
         // Firebase registration and data storage...
         const userCredential = await createUserWithEmailAndPassword(
@@ -110,6 +119,7 @@ export default function Register() {
         });
 
         console.log("Registration successful!");
+        Alert.alert("Registration successful! Welcome");
         navigation.navigate("Home");
       }
     } catch (error) {
@@ -155,11 +165,26 @@ export default function Register() {
           <Text style={loginStyles.label}>Password:</Text>
           <TextInput
             style={loginStyles.input}
-            onChangeText={(text) => setPassword(text)}
+            onChangeText={handlePasswordChange}
             value={password}
             placeholder="Enter your password"
             secureTextEntry={true}
           />
+
+          <Text style={loginStyles.label}>Confirm Password:</Text>
+          <TextInput
+            style={loginStyles.input}
+            onChangeText={handleConfirmPasswordChange}
+            value={confirmPassword}
+            placeholder="Confirm your password"
+            secureTextEntry={true}
+          />
+
+          {showPasswordMismatch &&
+            Alert.alert(
+              "Passwords do not match",
+              "Please re-enter your password."
+            )}
 
           <Text style={loginStyles.label}>Address:</Text>
           <TextInput
@@ -170,33 +195,12 @@ export default function Register() {
           />
 
           <Text style={loginStyles.label}>City:</Text>
-          <TouchableOpacity
-            onPress={() => setShowCityPicker(!showCityPicker)}
-            style={loginStyles.inputContainer}
-          >
-            <TextInput
-              style={loginStyles.input}
-              value={city}
-              placeholder="Select your city"
-              editable={false}
-              pointerEvents="none" // This prevents the text input from receiving touches
-            />
-          </TouchableOpacity>
-
-          {showCityPicker && (
-            <Picker
-              selectedValue={city}
-              onValueChange={(itemValue) => {
-                setCity(itemValue);
-                setShowCityPicker(false);
-              }}
-              style={loginStyles.picker}
-            >
-              {cityOptions.map((option, index) => (
-                <Picker.Item key={index} label={option} value={option} />
-              ))}
-            </Picker>
-          )}
+          <TextInput
+            style={loginStyles.input}
+            onChangeText={(text) => setCity(text)}
+            value={city}
+            placeholder="Enter your city"
+          />
 
           <Text style={loginStyles.label}>Zip Code:</Text>
           <TextInput
@@ -205,7 +209,7 @@ export default function Register() {
             value={zipCode}
             placeholder="Enter your zip code"
             keyboardType="numeric"
-            maxLength={5} // Set max length to 5 digits
+            maxLength={5}
           />
 
           <Text style={loginStyles.label}>Country:</Text>
