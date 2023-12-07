@@ -42,24 +42,29 @@ export default function Cuisine({ data, onAddToCart }) {
       >
         {/* Display filtered data in two columns per row */}
         <View style={styles.rowContainer}>
-          {filteredData.map((item, index) => (
-            <View key={index} style={styles.column}>
-              <Image source={{ uri: item.imageUrl }} style={styles.image} />
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.price}>${item.price}</Text>
-              <TouchableOpacity onPress={() => handleAddButtonPress(item)}>
-                <View style={styles.addButton}>
-                  <Text style={styles.addButtonText}>Add</Text>
-                </View>
-              </TouchableOpacity>
+          {filteredData.length > 0 ? (
+            filteredData.map((item, index) => (
+              <View key={index} style={styles.column}>
+                <Image source={{ uri: item.imageUrl }} style={styles.image} />
+                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.price}>${item.price}</Text>
+                <TouchableOpacity onPress={() => handleAddButtonPress(item)}>
+                  <View style={styles.addButton}>
+                    <Text style={styles.addButtonText}>Add</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))
+          ) : (
+            <View style={styles.column}>
+              <Text style={styles.notFoundText}>Item not found</Text>
             </View>
-          ))}
+          )}
         </View>
       </ImageBackground>
     </ScrollView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     padding: 15,
