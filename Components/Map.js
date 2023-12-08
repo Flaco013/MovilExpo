@@ -1,8 +1,8 @@
 // MapViewComponent.js
 import React from "react";
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-
+import { mapStyles } from "./Styles";
 const LaPazCoordinates = {
   latitude: 24.142,
   longitude: -110.312,
@@ -48,10 +48,10 @@ const Map = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={mapStyles.container}>
       <MapView
         ref={mapRef}
-        style={styles.map}
+        style={mapStyles.map}
         initialRegion={{
           latitude: LaPazCoordinates.latitude,
           longitude: LaPazCoordinates.longitude,
@@ -59,60 +59,35 @@ const Map = () => {
           longitudeDelta: 0.1,
         }}
       >
-        {/* Marker for La Paz */}
         <Marker
           coordinate={LaPazCoordinates}
-          title="La Paz, BCS, Mexico"
-          description="Beautiful city by the sea"
+          title="Sushi La PAZ"
+          description="Best sushi restaurant in La Paz"
         />
 
-        {/* Marker for Cabo San Lucas */}
         <Marker
           coordinate={CaboSanLucasCoordinates}
-          title="Cabo San Lucas"
-          description="Popular tourist destination"
+          title="Sushi Cabo San Lucas"
+          description="Best sushi restaurant in Cabo San Lucas"
         />
 
-        {/* Marker for San Jose del Cabo */}
         <Marker
           coordinate={SanJoseDelCaboCoordinates}
-          title="San Jose del Cabo"
-          description="Charming town with historic charm"
+          title="Sushi San Jose del Cabo"
+          description="Cool sushi restaurant in San Jose del Cabo"
         />
       </MapView>
 
-      <View style={styles.zoomButtonsContainer}>
-        <TouchableOpacity style={styles.zoomButton} onPress={handleZoomIn}>
+      <View style={mapStyles.zoomButtonsContainer}>
+        <TouchableOpacity style={mapStyles.zoomButton} onPress={handleZoomIn}>
           <Text>Zoom In</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.zoomButton} onPress={handleZoomOut}>
+        <TouchableOpacity style={mapStyles.zoomButton} onPress={handleZoomOut}>
           <Text>Zoom Out</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    flex: 1,
-  },
-  zoomButtonsContainer: {
-    position: "absolute",
-    bottom: 16,
-    right: 16,
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  zoomButton: {
-    backgroundColor: "rgba(255,255,255,0.7)",
-    borderRadius: 8,
-    padding: 8,
-    marginVertical: 4,
-  },
-});
 
 export default Map;

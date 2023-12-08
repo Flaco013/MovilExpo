@@ -5,13 +5,12 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   ImageBackground,
 } from "react-native";
 import { getAuth, updateProfile } from "firebase/auth";
 import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore";
 import loginStyles from "./Styles";
-
+import { profileStyles } from "./Styles";
 const ProfileSettings = () => {
   const auth = getAuth();
   const firestore = getFirestore();
@@ -97,11 +96,11 @@ const ProfileSettings = () => {
       source={require("/Users/alexisgasga1/todo-list-mobile/assets/sushi.png")}
       style={loginStyles.background}
     >
-      <View style={styles.container}>
-        <View style={styles.settingItem}>
-          <Text style={styles.settingText}>Name:</Text>
+      <View style={profileStyles.container}>
+        <View style={profileStyles.settingItem}>
+          <Text style={profileStyles.settingText}>Name:</Text>
           <TextInput
-            style={styles.input}
+            style={profileStyles.input}
             value={firstName}
             onChangeText={(text) =>
               setFirstName(text.replace(/[^a-zA-Z ]/g, ""))
@@ -110,10 +109,10 @@ const ProfileSettings = () => {
           />
         </View>
 
-        <View style={styles.settingItem}>
-          <Text style={styles.settingText}>Last Name:</Text>
+        <View style={profileStyles.settingItem}>
+          <Text style={profileStyles.settingText}>Last Name:</Text>
           <TextInput
-            style={styles.input}
+            style={profileStyles.input}
             value={lastName}
             onChangeText={(text) =>
               setLastName(text.replace(/[^a-zA-Z ]/g, ""))
@@ -122,30 +121,30 @@ const ProfileSettings = () => {
           />
         </View>
 
-        <View style={styles.settingItem}>
-          <Text style={styles.settingText}>Address:</Text>
+        <View style={profileStyles.settingItem}>
+          <Text style={profileStyles.settingText}>Address:</Text>
           <TextInput
-            style={styles.input}
+            style={profileStyles.input}
             value={address}
             onChangeText={setAddress}
             placeholder="Enter your address"
           />
         </View>
 
-        <View style={styles.settingItem}>
-          <Text style={styles.settingText}>City:</Text>
+        <View style={profileStyles.settingItem}>
+          <Text style={profileStyles.settingText}>City:</Text>
           <TextInput
-            style={styles.input}
+            style={profileStyles.input}
             value={city}
             onChangeText={(text) => setCity(text.replace(/[^a-zA-Z ]/g, ""))}
             placeholder="Enter your city"
           />
         </View>
 
-        <View style={styles.settingItem}>
-          <Text style={styles.settingText}>Zip Code:</Text>
+        <View style={profileStyles.settingItem}>
+          <Text style={profileStyles.settingText}>Zip Code:</Text>
           <TextInput
-            style={styles.input}
+            style={profileStyles.input}
             value={zipCode}
             onChangeText={(text) =>
               setZipCode(text.replace(/[^0-9]/g, "").slice(0, 5))
@@ -157,52 +156,13 @@ const ProfileSettings = () => {
         </View>
 
         <TouchableOpacity onPress={saveChanges}>
-          <View style={styles.saveButton}>
-            <Text style={styles.saveButtonText}>Save Changes</Text>
+          <View style={profileStyles.saveButton}>
+            <Text style={profileStyles.saveButtonText}>Save Changes</Text>
           </View>
         </TouchableOpacity>
       </View>
     </ImageBackground>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: "#fff", // Set background color
-  },
-  settingItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  settingText: {
-    fontSize: 18, // Increase font size
-    fontWeight: "bold", // Add bold style
-  },
-  input: {
-    flex: 1,
-    marginLeft: 8,
-    height: 40,
-    borderColor: "#ccc", // Lighter border color
-    borderWidth: 1,
-    paddingLeft: 8,
-    borderRadius: 8,
-  },
-  saveButton: {
-    backgroundColor: "blue",
-    padding: 16,
-    alignItems: "center",
-    borderRadius: 8,
-    marginTop: 24, // Add more top margin
-  },
-  saveButtonText: {
-    color: "white",
-    fontSize: 18, // Increase font size
-    fontWeight: "bold", // Add bold style
-  },
-});
 
 export default ProfileSettings;

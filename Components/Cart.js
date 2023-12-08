@@ -5,18 +5,22 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  StyleSheet,
+  Stylesheet,
   Alert,
   ImageBackground,
+  Modal,
 } from "react-native";
 import loginStyles from "./Styles";
 import { connect } from "react-redux";
 import { removeFromCart, addToCart } from "./actions";
+import Drinks from "./Drinks";
+import { cartStyles } from "./Styles";
 
 const Cart = ({ selectedItems, removeFromCart, addToCart, navigation }) => {
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isDrinksModalVisible, setDrinksModalVisible] = useState(false);
 
-  // Calculate the total price when the selected items change
+
   useEffect(() => {
     console.log("Received selectedItems in Cart:", selectedItems);
 
@@ -35,9 +39,9 @@ const Cart = ({ selectedItems, removeFromCart, addToCart, navigation }) => {
   }, [selectedItems]);
 
   const handleRemove = (item) => {
-    // Check if the quantity is greater than 1
+   
     if (item.quantity > 1) {
-      // If yes, decrement the quantity
+      
       removeFromCart({ ...item, quantity: item.quantity - 1 });
     } else {
       // If the quantity is 1, remove the item from the cart
@@ -53,11 +57,19 @@ const Cart = ({ selectedItems, removeFromCart, addToCart, navigation }) => {
     if (totalPrice > 0) {
       navigation.navigate("CheckOut", { totalPrice });
     } else {
-      // Display alert if the cart is empty
+  
       Alert.alert("Empty Cart", "Cart is empty. Please add items in cuisine.", [
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
     }
+  };
+
+  const handleShowDrinks = () => {
+    setDrinksModalVisible(true);
+  };
+
+  const handleCloseDrinks = () => {
+    setDrinksModalVisible(false);
   };
 
   return (
@@ -65,8 +77,8 @@ const Cart = ({ selectedItems, removeFromCart, addToCart, navigation }) => {
       source={require("/Users/alexisgasga1/todo-list-mobile/assets/sushi.png")}
       style={loginStyles.background}
     >
-      <View style={styles.container}>
-        <Text style={styles.title}>Your Order</Text>
+      <View style={cartStyles.container}>
+        <Text style={cartStyles.title}>Your Order</Text>
         <FlatList
           data={selectedItems}
           keyExtractor={(item) => item.id.toString()}
@@ -74,25 +86,25 @@ const Cart = ({ selectedItems, removeFromCart, addToCart, navigation }) => {
             console.log("this is from Cart component");
             console.log("Rendering Item:", item);
             return (
-              <View style={styles.cartItem}>
+              <View style={cartStyles.cartItem}>
                 <Image
                   source={{ uri: item.imageUrl }}
-                  style={styles.itemImage}
+                  style={cartStyles.itemImage}
                 />
-                <View style={styles.itemDetails}>
-                  <Text style={styles.itemName}>{item.name}</Text>
-                  <Text style={styles.itemPrice}>${item.price}</Text>
+                <View style={cartStyles.itemDetails}>
+                  <Text style={cartStyles.itemName}>{item.name}</Text>
+                  <Text style={cartStyles.itemPrice}>${item.price}</Text>
                 </View>
-                <View style={styles.buttonsContainer}>
+                <View style={cartStyles.buttonsContainer}>
                   <TouchableOpacity onPress={() => handleRemove(item)}>
-                    <View style={styles.removeButton}>
-                      <Text style={styles.buttonText}> - </Text>
+                    <View style={cartStyles.removeButton}>
+                      <Text style={cartStyles.buttonText}> - </Text>
                     </View>
                   </TouchableOpacity>
-                  <Text style={styles.itemName}>{item.quantity} </Text>
+                  <Text style={cartStyles.itemName}>{item.quantity} </Text>
                   <TouchableOpacity onPress={() => handleAddAnother(item)}>
-                    <View style={styles.addButton}>
-                      <Text style={styles.buttonText}> + </Text>
+                    <View style={cartStyles.addButton}>
+                      <Text style={cartStyles.buttonText}> + </Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -100,18 +112,31 @@ const Cart = ({ selectedItems, removeFromCart, addToCart, navigation }) => {
             );
           }}
         />
-        <View style={styles.totalContainer}>
-          <Text style={styles.totalText}>Total:</Text>
-          <Text style={styles.totalAmount}>${totalPrice.toFixed(2)}</Text>
-        </View>
-
-        {/* button to navigate to the checkout screen */}
-
-        <TouchableOpacity onPress={handleNavigateToCheckout}>
-          <View style={styles.checkoutButton}>
-            <Text style={styles.buttonCheckOutText}>Go to Check Out</Text>
+        <TouchableOpacity onPress={handleShowDrinks}>
+          <View style={cartStyles.addDrinksButton}>
+            <Text style={cartStyles.buttonText}>Add Drinks</Text>
           </View>
         </TouchableOpacity>
+        <View style={cartStyles.totalContainer}>
+          <Text style={cartStyles.totalText}>Total:</Text>
+          <Text style={cartStyles.totalAmount}>${totalPrice.toFixed(2)}</Text>
+        </View>
+
+       
+
+        <TouchableOpacity onPress={handleNavigateToCheckout}>
+          <View style={cartStyles.checkoutButton}>
+            <Text style={cartStyles.buttonCheckOutText}>Go to Check Out</Text>
+          </View>
+        </TouchableOpacity>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isDrinksModalVisible}
+          onRequestClose={handleCloseDrinks}
+        >
+          <Drinks onClose={handleCloseDrinks} onAddToCart={addToCart} />
+        </Modal>
       </View>
     </ImageBackground>
   );
@@ -127,96 +152,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    flex: 1,
-    //backgroundColor: "#fff", // Add background color
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-    color: "#333", // Add text color
-  },
-  cartItem: {
-    flexDirection: "row",
-    marginBottom: 10,
-    alignItems: "center", // Align items vertically in the row
-    backgroundColor: "#f5f5f5", // Add item background color
-    padding: 10, // Add padding
-    borderRadius: 8, // Add border radius
-  },
-  itemImage: {
-    width: 70,
-    height: 70,
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  itemDetails: {
-    flex: 1,
-  },
-  itemName: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#333", // Add text color
-  },
-  itemPrice: {
-    fontSize: 19,
-    fontWeight: "bold",
-    color: "orange",
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  removeButton: {
-    backgroundColor: "#FF0000",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  addButton: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-  },
-  checkoutButton: {
-    backgroundColor: "black",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  buttonCheckOutText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 18,
-  },
-  totalContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    borderTopWidth: 1,
-    paddingTop: 10,
-  },
-  totalText: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "black", // Add text color
-  },
-  totalAmount: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#7fff00",
-  },
-});

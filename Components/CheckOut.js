@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   Alert,
   ImageBackground,
+  TextInput,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { connect } from "react-redux";
@@ -17,6 +17,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import loginStyles from "./Styles";
+import { checkOutStyles } from "./Styles";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 
 function CheckOut({ userProfile, userId, dispatchClearCart }) {
@@ -24,7 +25,45 @@ function CheckOut({ userProfile, userId, dispatchClearCart }) {
   const { totalPrice } = route.params;
   const nav = useNavigation();
 
+  const [debitCard, setDebitCard] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
+  const [cvv, setCVV] = useState("");
   const handlePlaceOrder = async () => {
+    // Validate the debit card number
+    if (!/^\d{16}$/.test(debitCard)) {
+      Alert.alert(
+        "Invalid Debit Card",
+        "Please enter a valid 16-digit debit card number."
+      );
+      return;
+    }
+
+    const currentYear = new Date().getFullYear() % 100; // Get the last two digits of the current year
+    const currentMonth = new Date().getMonth() + 1;
+
+    const [enteredMonth, enteredYear] = expirationDate
+      .split("/")
+      .map((s) => parseInt(s, 10));
+
+    if (
+      !/^(0[1-9]|1[0-2])\/(2[3-9]|3[0-9]|4[0-9]|5[0-5])$/.test(
+        expirationDate
+      ) ||
+      (enteredYear === currentYear && enteredMonth < currentMonth) // Expiration date is in the past
+    ) {
+      Alert.alert(
+        "Invalid Expiration Date",
+        "Please enter a valid expiration date in the format MM/YY that is greater than the current date."
+      );
+      return;
+    }
+
+    // Validate the CVV
+    if (!/^\d{3}$/.test(cvv)) {
+      Alert.alert("Invalid CVV", "Please enter a valid 3-digit CVV.");
+      return;
+    }
+
     try {
       const db = getFirestore();
       const ordersCollection = collection(db, "orders");
@@ -60,47 +99,69 @@ function CheckOut({ userProfile, userId, dispatchClearCart }) {
       source={require("/Users/alexisgasga1/todo-list-mobile/assets/sushi.png")}
       style={loginStyles.background}
     >
-      <View style={styles.container}>
-        <Text style={styles.title}>Delivery Details</Text>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>First Name:</Text>
-          <Text style={styles.infoValue}>{userProfile.firstName}</Text>
+      <View style={checkOutStyles.container}>
+        <Text style={checkOutStyles.title}>Delivery Details</Text>
+        <View style={checkOutStyles.infoContainer}>
+          <Text style={checkOutStyles.infoLabel}>First Name:</Text>
+          <Text style={checkOutStyles.infoValue}>{userProfile.firstName}</Text>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Last Name:</Text>
-          <Text style={styles.infoValue}>{userProfile.lastName}</Text>
+        <View style={checkOutStyles.infoContainer}>
+          <Text style={checkOutStyles.infoLabel}>Last Name:</Text>
+          <Text style={checkOutStyles.infoValue}>{userProfile.lastName}</Text>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Address:</Text>
-          <Text style={styles.infoValue}>{userProfile.address}</Text>
+        <View style={checkOutStyles.infoContainer}>
+          <Text style={checkOutStyles.infoLabel}>Address:</Text>
+          <Text style={checkOutStyles.infoValue}>{userProfile.address}</Text>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>City:</Text>
-          <Text style={styles.infoValue}>{userProfile.city}</Text>
+        <View style={checkOutStyles.infoContainer}>
+          <Text style={checkOutStyles.infoLabel}>City:</Text>
+          <Text style={checkOutStyles.infoValue}>{userProfile.city}</Text>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>State:</Text>
-          <Text style={styles.infoValue}>{userProfile.state}</Text>
+        <View style={checkOutStyles.infoContainer}>
+          <Text style={checkOutStyles.infoLabel}>State:</Text>
+          <Text style={checkOutStyles.infoValue}>{userProfile.state}</Text>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Zip Code:</Text>
-          <Text style={styles.infoValue}>{userProfile.zipCode}</Text>
+        <View style={checkOutStyles.infoContainer}>
+          <Text style={checkOutStyles.infoLabel}>Zip Code:</Text>
+          <Text style={checkOutStyles.infoValue}>{userProfile.zipCode}</Text>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Country:</Text>
-          <Text style={styles.infoValue}>{userProfile.country}</Text>
+        <View style={checkOutStyles.infoContainer}>
+          <Text style={checkOutStyles.infoLabel}>Country:</Text>
+          <Text style={checkOutStyles.infoValue}>{userProfile.country}</Text>
         </View>
 
-        <Text style={styles.amountText}>
+        <TextInput
+          style={checkOutStyles.input}
+          placeholder="Debit Card Number (16 digits)"
+          keyboardType="numeric"
+          maxLength={16}
+          onChangeText={(text) => setDebitCard(text)}
+        />
+
+        <TextInput
+          style={checkOutStyles.input}
+          placeholder="Expiration Date (MM/YY)"
+          maxLength={5}
+          onChangeText={(text) => setExpirationDate(text)}
+        />
+
+        <TextInput
+          style={checkOutStyles.input}
+          placeholder="CVV (3 digits)"
+          keyboardType="numeric"
+          maxLength={3}
+          onChangeText={(text) => setCVV(text)}
+        />
+
+        <Text style={checkOutStyles.amountText}>
           Total Amount: ${totalPrice.toFixed(2)}
         </Text>
 
-        {/* Place Order Button */}
         <TouchableOpacity
           onPress={handlePlaceOrder}
-          style={styles.placeOrderButton}
+          style={checkOutStyles.placeOrderButton}
         >
-          <Text style={styles.placeOrderButtonText}>Place Order</Text>
+          <Text style={checkOutStyles.placeOrderButtonText}>Place Order</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -117,50 +178,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CheckOut);
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flex: 1,
-    backgroundColor: "#59CDCE",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  infoContainer: {
-    flexDirection: "row",
-    marginBottom: 10,
-    alignItems: "center",
-  },
-  infoLabel: {
-    fontSize: 18,
-    fontWeight: "bold",
-    width: 120,
-  },
-  infoValue: {
-    fontSize: 18,
-  },
-  amountText: {
-    fontSize: 23,
-    marginTop: 290,
-    marginBottom: 10,
-    fontWeight: "bold",
-    color: "black",
-    textAlign: "center",
-  },
-  placeOrderButton: {
-    backgroundColor: "green",
-    paddingVertical: 15,
-    borderRadius: 10,
-    marginTop: 20,
-    alignItems: "center",
-  },
-  placeOrderButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});

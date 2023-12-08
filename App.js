@@ -22,15 +22,10 @@ import PasswordSettings from "./Components/PasswordSettings";
 import ProfileSettings from "./Components/ProfileSettings";
 
 const Stack = createStackNavigator();
-// Import the functions you need from the SDKs you need
+
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyD0cxmSSpXPxnI7-58_9AnbEH3w5CdD-Ds",
   authDomain: "sushi-a342c.firebaseapp.com",

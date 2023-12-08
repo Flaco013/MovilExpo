@@ -68,7 +68,6 @@ const Login = ({ dispatch }) => {
       console.log("User Address:", userProfile.address);
       console.log("city:", userProfile.city);
       console.log("State:", userProfile.state);
-      //console.log("State:", userProfile.sate);
       console.log("User Zip Code:", userProfile.zipCode);
       console.log("User Country:", userProfile.country);
 
@@ -78,7 +77,6 @@ const Login = ({ dispatch }) => {
       setEmail("");
       setPassword("");
 
-      // Navigate to the next screen or perform other actions
       navigation.navigate("Home");
       //navigation.navigate("CheckOut", { totalPrice, userProfile });
     } catch (error) {
