@@ -1,6 +1,6 @@
 # React Components
 
-Este es el proyecto base de la aplicacion movil ToDo List
+Este es el proyecto final para movil
 
 ## Ejecutar Local
 
